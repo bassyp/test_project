@@ -1,0 +1,2 @@
+class GroupHistory < ApplicationRecord
+end

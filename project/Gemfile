@@ -4,8 +4,15 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.0.rc1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
+
+# Database area
+# Use mysql as the database for Active Record
+gem "mysql2", "~> 0.5"
+# Use postgresql as the database for Active Record
+gem "pg", "~> 1.1"
 # Use sqlite3 as the database for Active Record
 gem "sqlite3", ">= 2.1"
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
@@ -73,8 +80,15 @@ gem "view_component-form", "~> 0.2.8"
 gem "devise", "~> 4.9"
 gem "tailwind_devise", "~> 0.0.3"
 
+
+
+# https://www.phlex.fun/
+# https://www.phlexing.fun/
+# https://phlexui.com/docs/installation/rails_bundler
+# https://gorails.com/episodes/components-with-phlex-in-rails
 gem "phlex", "~> 1.11"
-
+# gem 'phlex', '2.0.0.beta2'
 gem "phlex-rails", "~> 1.1"
+gem "phlexy_ui"#, "~> 0.1.15"
+gem "phlex_ui", "~> 0.1.9"
 
-gem "phlexy_ui", "~> 0.1.11"
