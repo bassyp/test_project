@@ -79,7 +79,7 @@ gem "view_component-form", "~> 0.2.8"
 
 gem "devise", "~> 4.9"
 gem "tailwind_devise", "~> 0.0.3"
-
+gem 'devise-tailwinded'
 
 
 # https://www.phlex.fun/
