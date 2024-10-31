@@ -1,5 +1,5 @@
 class NavbarComponent < ApplicationComponent #Phlex::HTML
-
+  
   def view_template
     parents = LinkItem.where(parent_id: nil).first.childs
     div(class: "navbar bg-base-100", "data-controller" => "header") do
@@ -34,6 +34,7 @@ class NavbarComponent < ApplicationComponent #Phlex::HTML
           end
         end
         a(
+          href: root_path,
           class: "btn btn-ghost text-xl",
           title: "Ruby on Rails - Business Support System"
         ) { "RRBBS" }
@@ -69,14 +70,21 @@ class NavbarComponent < ApplicationComponent #Phlex::HTML
             class:
               "menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           ) do
-            li do
-              a(class: "justify-between") do
-                plain " Profile "
-                span(class: "badge") { "New" }
+            if helpers.user_signed_in?
+              li do
+                a(class: "justify-between") do
+                  plain " Profile "
+                  span(class: "badge") { "New" }
+                end
               end
+              li { a { "Settings" } }
+              # li { helpers.button_to('/users/sign_out', method: :delete) { "Logout" } }
+              # li { helpers.link_to('/users/sign_out', data: {"turbo-method": :delete} ) { "Logout" } }
+              li { a(href: destroy_user_session_path, data: {"turbo-method": :delete} ) { "Logout" } } # '/users/sign_out'
+            else
+              # li { helpers.button_to('/users/sign_in') { "Login" } }
+              li { a(href: new_user_session_path) { "Login" } } # '/users/sign_in'
             end
-            li { a { "Settings" } }
-            li { a(href: '/users/sign_out') { "Logout" } }
           end
         end
       end
