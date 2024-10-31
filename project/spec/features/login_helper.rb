@@ -1,8 +1,8 @@
 require 'rails_helper'
 # require 'webdrivers/chromedriver'
-#require 'webdrivers/geckodriver'
-#require 'webdrivers/iedriver'
-#require 'webdrivers/edgedriver'
+# require 'webdrivers/geckodriver'
+# require 'webdrivers/iedriver'
+# require 'webdrivers/edgedriver'
 
 # This drivers work
 # :selenium => Selenium driving Firefox

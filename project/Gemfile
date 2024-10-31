@@ -70,9 +70,9 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   # gem 'webdrivers', '~> 5.3', '>= 5.3.1'
-  
+
   gem "rspec"
-  gem 'rspec-rails'
+  gem "rspec-rails"
 end
 
 gem "seed_dump", "~> 3.3"
@@ -83,7 +83,7 @@ gem "view_component-form", "~> 0.2.8"
 
 gem "devise", "~> 4.9"
 gem "tailwind_devise", "~> 0.0.3"
-gem 'devise-tailwinded'
+gem "devise-tailwinded"
 
 
 # https://www.phlex.fun/
@@ -93,6 +93,5 @@ gem 'devise-tailwinded'
 gem "phlex", "~> 1.11"
 # gem 'phlex', '2.0.0.beta2'
 gem "phlex-rails", "~> 1.1"
-gem "phlexy_ui"#, "~> 0.1.15"
+gem "phlexy_ui"# , "~> 0.1.15"
 gem "phlex_ui", "~> 0.1.9"
-

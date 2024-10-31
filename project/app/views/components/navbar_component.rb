@@ -1,5 +1,4 @@
-class NavbarComponent < ApplicationComponent #Phlex::HTML
-  
+class NavbarComponent < ApplicationComponent # Phlex::HTML
   def view_template
     parents = LinkItem.where(parent_id: nil).first.childs
     div(class: "navbar bg-base-100", "data-controller" => "header") do
@@ -41,7 +40,7 @@ class NavbarComponent < ApplicationComponent #Phlex::HTML
       end
       div(class: "navbar-center hidden lg:flex") do
         ul(class: "menu menu-horizontal px-1") do
-          navigation_links(parents)          
+          navigation_links(parents)
         end
       end
       div(class: "navbar-end") do
@@ -80,7 +79,7 @@ class NavbarComponent < ApplicationComponent #Phlex::HTML
               li { a { "Settings" } }
               # li { helpers.button_to('/users/sign_out', method: :delete) { "Logout" } }
               # li { helpers.link_to('/users/sign_out', data: {"turbo-method": :delete} ) { "Logout" } }
-              li { a(href: destroy_user_session_path, data: {"turbo-method": :delete} ) { "Logout" } } # '/users/sign_out'
+              li { a(href: destroy_user_session_path, data: { "turbo-method": :delete }) { "Logout" } } # '/users/sign_out'
             else
               # li { helpers.button_to('/users/sign_in') { "Login" } }
               li { a(href: new_user_session_path) { "Login" } } # '/users/sign_in'
@@ -92,10 +91,10 @@ class NavbarComponent < ApplicationComponent #Phlex::HTML
   end
 
   def navigation_links(links)
-    links.try(:each){|link|
+    links.try(:each) { |link|
       childs      = link.childs
       search_href = nil
-      if link.f_type == 'link'
+      if link.f_type == "link"
         if link.url.present?
           main_href = link.url
         else
@@ -105,36 +104,33 @@ class NavbarComponent < ApplicationComponent #Phlex::HTML
           end
         end
         if search_href.present?
-          li { 
+          li {
             div(class: "grid grid-cols-12 gap-4") do
               div(class: "col-span-8") do
-                a(href: main_href, target: link.target)  { link.title.html_safe } 
+                a(href: main_href, target: link.target)  { link.title.html_safe }
               end
               div(class: "col-span-4") do
-                a(href: search_href, target: link.target)  { "<i class='fa-solid fa-magnifying-glass'></i>".html_safe }     
+                a(href: search_href, target: link.target)  { "<i class='fa-solid fa-magnifying-glass'></i>".html_safe }
               end
-              
             end
-            
           }
         else
           li { a(href: main_href, target: link.target)  { link.title.html_safe } }
         end
-        
-      elsif link.f_type == 'group'
+
+      elsif link.f_type == "group"
         li do
           details do
-            summary { link.title.html_safe}
+            summary { link.title.html_safe }
             ul(class: "p-2") do
               navigation_links(childs)
             end
           end
         end
-      elsif link.f_type == 'divider'
+      elsif link.f_type == "divider"
         hr(class: "my-2 h-0 border border-t-0 border-solid border-neutral-100 dark:border-white/10") do
-          
         end
-      elsif link.f_type == 'headline'
+      elsif link.f_type == "headline"
         span(class: "block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-surface/50 focus:outline-none dark:bg-surface-dark dark:text-white/75") do
            link.title.html_safe
         end
