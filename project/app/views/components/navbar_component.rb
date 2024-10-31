@@ -2,7 +2,7 @@ class NavbarComponent < ApplicationComponent #Phlex::HTML
 
   def view_template
     parents = LinkItem.where(parent_id: nil).first.childs
-    div(class: "navbar bg-base-100") do
+    div(class: "navbar bg-base-100", "data-controller" => "header") do
       div(class: "navbar-start") do
         div(class: "dropdown") do
           div(
@@ -30,15 +30,7 @@ class NavbarComponent < ApplicationComponent #Phlex::HTML
             class:
               "menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           ) do
-            li { a { "Item 1" } }
-            li do
-              a { "Parent" }
-              ul(class: "p-3") do
-                li { a { "Submenu 1" } }
-                li { a { "Submenu 2" } }
-              end
-            end
-            li { a { "Item 3" } }
+            navigation_links(parents)
           end
         end
         a(
@@ -48,8 +40,7 @@ class NavbarComponent < ApplicationComponent #Phlex::HTML
       end
       div(class: "navbar-center hidden lg:flex") do
         ul(class: "menu menu-horizontal px-1") do
-          navigation_links(parents)
-          
+          navigation_links(parents)          
         end
       end
       div(class: "navbar-end") do
@@ -85,12 +76,13 @@ class NavbarComponent < ApplicationComponent #Phlex::HTML
               end
             end
             li { a { "Settings" } }
-            li { a { "Logout" } }
+            li { a(href: '/users/sign_out') { "Logout" } }
           end
         end
       end
     end
   end
+
   def navigation_links(links)
     links.try(:each){|link|
       childs      = link.childs

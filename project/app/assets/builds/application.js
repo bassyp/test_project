@@ -8397,8 +8397,16 @@ var hello_controller_default = class extends Controller {
   }
 };
 
+// app/javascript/controllers/header_controller.js
+var header_controller_default = class extends Controller {
+  connect() {
+    console.log("header connected");
+  }
+};
+
 // app/javascript/controllers/index.js
 application.register("hello", hello_controller_default);
+application.register("header", header_controller_default);
 
 // node_modules/phlex_ui/controllers/application.js
 var application2 = Application.start();
