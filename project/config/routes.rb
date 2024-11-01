@@ -14,3 +14,6 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 end
+
+load_individual_config_files(sub_file_or_folder: '"' + File.basename(File.dirname(__FILE__)) + '/"',
+                              regex_file_condition: "^#{File.basename(__FILE__).gsub(".", "*.")}")

@@ -39,3 +39,6 @@ plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
+
+load_individual_config_files(sub_file_or_folder: '"' + File.basename(File.dirname(__FILE__)) + '/"',
+                              regex_file_condition: "^#{File.basename(__FILE__).gsub(".", "*.")}")
