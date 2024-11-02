@@ -22,7 +22,9 @@ def load_individual_config_files(**args)
 
   # custom folder
   Dir.entries(complete_custom_folder).each do |file_or_folder|
-    if file_or_folder != "." && file_or_folder != ".." && file_or_folder =~ regex_file_condition
+    puts "#{complete_custom_folder}/#{file_or_folder}"
+    if file_or_folder != "." && file_or_folder != ".." && file_or_folder =~ regex_file_condition &&
+      File.exist?("#{complete_custom_folder}/#{file_or_folder}")
       files_or_folder = {
         complete_folder:          complete_custom_folder,
         file:                     file_or_folder,
@@ -30,8 +32,8 @@ def load_individual_config_files(**args)
       }
       files_or_folders           << files_or_folder
       if execute_require
-        puts "require #{root_folder}/#{files_or_folder[:complete_folder]}/#{files_or_folder[:file]}" if verbose
-        require "#{root_folder}/#{files_or_folder[:complete_folder]}/#{files_or_folder[:file]}"
+        puts "require #{complete_custom_folder}/#{files_or_folder[:file]}" if verbose
+        require "#{complete_custom_folder}/#{files_or_folder[:file]}"
       end
     end
   end
@@ -74,11 +76,40 @@ end
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Rrbbs
+module RRBBS
   class Application < Rails::Application
+    # load default field configuration
+    require File.join(File.dirname(__FILE__), "environments/default")
+
+    # set default directories
+    DEFAULT[:COSTUM_ROOT]       = ENV.fetch("BBRRS_CUSTOM_ROOT") { "#{Rails.root}/../custom/" }
+    DEFAULT[:PLUGIN_ROOT]      = ENV.fetch("BBRRS_PLUGIN_ROOT") { "#{Rails.root}/../extensions/plugins/" }
+    DEFAULT[:PLUGIN_FOLDERS]   = Dir.entries(DEFAULT[:PLUGIN_ROOT]).select { |e| File.directory? File.join(DEFAULT[:PLUGIN_ROOT], e) and [ ".", ".." ].exclude?(e) }.map { |e|File.join(DEFAULT[:PLUGIN_ROOT], e) }
+    DEFAULT[:MANDANT_ROOT]     = ENV.fetch("BBRRS_MANDANT_ROOT") { "#{Rails.root}/../extensions/mandants/" }
+    DEFAULT[:MANDANT_FOLDERS]  = Dir.entries(DEFAULT[:MANDANT_ROOT]).select { |e| File.directory? File.join(DEFAULT[:MANDANT_ROOT], e) and [ ".", ".." ].exclude?(e) }.map { |e| File.join(DEFAULT[:MANDANT_ROOT], e) }
+    # DEFAULT[:CONFIG_ROOT]      = ENV.fetch("BBRRS_CONFIG_FOLDER") { "#{Rails.root}/../extensions/configs/"}
+    # DEFAULT[:CONFIG_FOLDERS]   = Dir.entries(DEFAULT[:CONFIG_ROOT]).select { |e| File.directory? File.join(DEFAULT[:CONFIG_ROOT], e) and [ ".", ".." ].exclude?(e) }
+    DEFAULT[:EXTENSION_FOOT_FOLDERS]  = DEFAULT[:MANDANT_FOLDERS] + DEFAULT[:PLUGIN_FOLDERS]
+    DEFAULT[:CUSTOM_FOLDERS]          =  DEFAULT[:EXTENSION_FOOT_FOLDERS]+ [ DEFAULT[:COSTUM_ROOT] ]
+
     config.autoload_paths << "#{root}/app/views"
     config.autoload_paths << "#{root}/app/views/layouts"
     config.autoload_paths << "#{root}/app/views/components"
+
+    # load custom config from custom and extensions folder
+    if File.exist?("#{DEFAULT[:COSTUM_ROOT]}/config/database.yml")
+      config.paths["config/database"] = "#{DEFAULT[:COSTUM_ROOT]}/config/database.yml"
+    end
+
+    config.paths.keys.try(:each) do |key|
+      DEFAULT[:CUSTOM_FOLDERS].try(:each) do |folder|
+        if File.exist?("#{folder}/#{key}/")
+          config.paths[key] << File.join(folder, key)
+          # puts "add to config.paths #{key}: #{File.join(folder, key)}"
+        end
+      end
+    end
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
 
@@ -97,5 +128,5 @@ module Rrbbs
   end
 end
 
-load_individual_config_files(sub_file_or_folder: '"' + File.basename(File.dirname(__FILE__)) + '/"',
+load_individual_config_files(sub_file_or_folder: '"' + File.dirname(__FILE__).gsub("#{Rails.root}", "") + '/"',
                               regex_file_condition: "^#{File.basename(__FILE__).gsub(".", "*.")}")

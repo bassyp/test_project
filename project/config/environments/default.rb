@@ -1,8 +1,6 @@
-# Load the Rails application.
-require_relative "application"
+# !!! DO NOT CHANGE HERE THE DEFAULT CONFIG VALUES IN ..custom/config/environments/default.rb !!!
 
-# Initialize the Rails application.
-Rails.application.initialize!
+COMMON[:system_title] = "RRBBS"
 
 load_individual_config_files(sub_file_or_folder: '"' + File.dirname(__FILE__).gsub("#{Rails.root}", "") + '/"',
                               regex_file_condition: "^#{File.basename(__FILE__).gsub(".", "*.")}")

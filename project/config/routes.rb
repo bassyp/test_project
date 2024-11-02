@@ -15,5 +15,5 @@ Rails.application.routes.draw do
   # root "posts#index"
 end
 
-load_individual_config_files(sub_file_or_folder: '"' + File.basename(File.dirname(__FILE__)) + '/"',
+load_individual_config_files(sub_file_or_folder: '"' + File.dirname(__FILE__).gsub("#{Rails.root}", "") + '/"',
                               regex_file_condition: "^#{File.basename(__FILE__).gsub(".", "*.")}")

@@ -36,7 +36,7 @@ class NavbarComponent < ApplicationComponent # Phlex::HTML
           href: root_path,
           class: "btn btn-ghost text-xl",
           title: "Ruby on Rails - Business Support System"
-        ) { "RRBBS" }
+        ) { "#{COMMON[:system_title]}" }
       end
       div(class: "navbar-center hidden lg:flex") do
         ul(class: "menu menu-horizontal px-1") do
