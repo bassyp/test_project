@@ -4,7 +4,7 @@ require "rails/all"
 
 # Example:
 # load_individual_config_files(:excluded_main_folder => ['configs'],
-# 				        :sub_file_or_folder 	=> '"app/views/import_#{extension_main_folder.singularize}_#{extension_folder.singularize}"',
+# 				        :sub_path 	=> '"app/views/import_#{extension_main_folder.singularize}_#{extension_folder.singularize}"',
 # 								:regex_file_condition => "^_fragment")
 #  Files will be ignored, if extension folder or target folder contain .ignore file
 def load_individual_config_files(**args)
@@ -12,13 +12,13 @@ def load_individual_config_files(**args)
   extension_root_folder = (args[:extension_root_folder].present? ? args[:extension_root_folder] : "../extensions/")
   included_main_folder  = (args[:included_main_folder].present? ? args[:included_main_folder] : Dir.entries("#{root_folder}/#{extension_root_folder}").select { |e| File.directory? File.join("#{root_folder}/#{extension_root_folder}", e) and [ ".", ".." ].exclude?(e) })
   excluded_main_folder  = (args[:excluded_main_folder].present? ? args[:excluded_main_folder] : [])
-  sub_file_or_folder    = (args[:sub_file_or_folder].present? ? eval(args[:sub_file_or_folder]) : "/")
+  sub_path    = (args[:sub_path].present? ? eval(args[:sub_path]) : "/")
   regex_file_condition  = (args[:regex_file_condition].present? ? Regexp.new(args[:regex_file_condition]) : Regexp.new(".*"))
   files_or_folders      = []
   execute_require       = (args[:execute_require].present? ? args[:execute_require] : true)
   verbose               = (args[:verbose].present? ? args[:verbose] : true)
 
-  complete_custom_folder = "#{root_folder}/../custom/#{sub_file_or_folder}"
+  complete_custom_folder = "#{root_folder}/../custom/#{sub_path}"
 
   # custom folder
   Dir.entries(complete_custom_folder).each do |file_or_folder|
@@ -43,7 +43,7 @@ def load_individual_config_files(**args)
       if included_main_folder.include?(extension_main_folder) && excluded_main_folder.exclude?(extension_main_folder)
         Dir.entries("#{extension_root_folder}#{extension_main_folder}/").each do |extension_folder|
           extension_sub_folder  = "#{extension_root_folder}/#{extension_main_folder}/#{extension_folder}"
-          complete_folder       = "#{extension_sub_folder}/#{sub_file_or_folder}"
+          complete_folder       = "#{extension_sub_folder}/#{sub_path}"
 
           if extension_folder != "." && extension_folder != ".." && File.directory?(Rails.root.join(complete_folder)) &&
             !File.exist?("#{extension_sub_folder}/.ignore") && !File.exist?("#{complete_folder}/.ignore")
@@ -109,6 +109,13 @@ module RRBBS
       end
     end
 
+    I18n.load_path += Dir[File.expand_path("config/locales") + "/*.yml"]
+    I18n.default_locale = :en # (note that `en` is already the default!)
+
+    I18n.locale = :de
+
+    puts I18n.t(:hello)
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
 
@@ -127,5 +134,5 @@ module RRBBS
   end
 end
 
-load_individual_config_files(sub_file_or_folder: '"' + File.dirname(__FILE__).gsub("#{Rails.root}", "") + '/"',
+load_individual_config_files(sub_path: '"' + File.dirname(__FILE__).gsub("#{Rails.root}", "") + '/"',
                               regex_file_condition: "^#{File.basename(__FILE__).gsub(".", "*.")}")

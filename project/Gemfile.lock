@@ -448,6 +448,7 @@ DEPENDENCIES
   debug
   devise (~> 4.9)
   devise-tailwinded
+  i18n
   jbuilder
   jsbundling-rails
   kamal
