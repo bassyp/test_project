@@ -95,3 +95,14 @@ gem "phlex", "~> 1.11"
 gem "phlex-rails", "~> 1.1"
 gem "phlexy_ui"# , "~> 0.1.15"
 gem "phlex_ui", "~> 0.1.9"
+
+# load custom Gemfile
+local_gemfile = "../custom/Gemfile"
+if File.exist?(local_gemfile)
+ eval_gemfile local_gemfile
+end
+
+# Load extensions Gemfiles
+Dir.glob('../extensions/**/{Gemfile}') do |file|
+  eval_gemfile file
+end

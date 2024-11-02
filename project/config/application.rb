@@ -22,7 +22,6 @@ def load_individual_config_files(**args)
 
   # custom folder
   Dir.entries(complete_custom_folder).each do |file_or_folder|
-    puts "#{complete_custom_folder}/#{file_or_folder}"
     if file_or_folder != "." && file_or_folder != ".." && file_or_folder =~ regex_file_condition &&
       File.exist?("#{complete_custom_folder}/#{file_or_folder}")
       files_or_folder = {
